@@ -289,6 +289,11 @@ not_relocated:	mov	r0, #0
 		mov	sp, r1
 		add	sp, sp, #128		@ relocate the stack
 
+#ifndef CONFIG_ZBOOT_ROM
+		/* cache_clean_flush may use the stack, so relocate it */
+		add	sp, sp, r6
+#endif
+
 		bl	cache_clean_flush
  ARM(		add	pc, r5, r0		) @ call relocation code
  THUMB(		add	r12, r5, r0		)
@@ -1071,5 +1076,5 @@ memdump:	mov	r12, r0
 reloc_end:
 
 		.align
-		.section ".stack", "w"
+		.section ".stack", "aw", %nobits
 user_stack:	.space	4096
