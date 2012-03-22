@@ -967,7 +967,11 @@ static struct i2c_board_info i2c_devices[] = {
 #endif
 #ifdef CONFIG_OV5642AF
 	{
+#ifdef CONFIG_MUCHTEL_A1
+		I2C_BOARD_INFO("ov5642af", 0x3C),
+#else
 		I2C_BOARD_INFO("ov5642af", 0xFD),
+#endif
 	},
 #endif
 #ifdef CONFIG_OV5642
@@ -1106,7 +1110,6 @@ static struct msm_camera_sensor_flash_src msm_flash_src = {
 };
 
 #ifdef CONFIG_OV5642
-
 static struct msm_camera_sensor_flash_data flash_ov5642 = {
         .flash_type = MSM_CAMERA_FLASH_LED,
         .flash_src  = &msm_flash_src
@@ -1132,6 +1135,11 @@ static struct platform_device msm_camera_sensor_ov5642 = {
 #endif
 
 #ifdef CONFIG_OV5642AF
+static struct msm_camera_sensor_flash_data flash_ov5642af = {
+	.flash_type = MSM_CAMERA_FLASH_LED,
+	.flash_src  = &msm_flash_src
+};
+
 static struct msm_camera_sensor_info msm_camera_sensor_ov5642af_data = {
 	.sensor_name    = "ov5642af",
 	.sensor_reset   = 0,
@@ -1139,7 +1147,7 @@ static struct msm_camera_sensor_info msm_camera_sensor_ov5642af_data = {
 	.vcm_pwd        = 0,
 	.vcm_enable     = 0,
 	.pdata          = &msm_camera_device_data,
-	//.flash_type     = MSM_CAMERA_FLASH_LED
+	.flash_type     = &flash_ov5642af,
 };
 
 static struct platform_device msm_camera_sensor_ov5642af = {
