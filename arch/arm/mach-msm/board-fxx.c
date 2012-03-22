@@ -1012,8 +1012,10 @@ static void config_gpio_table(uint32_t *table, int len)
 static uint32_t keypad_gpio_table[] = {
 	GPIO_CFG(41,  0, GPIO_CFG_INPUT, GPIO_CFG_NO_PULL, GPIO_CFG_16MA), /* Volume Up Key    */
 	GPIO_CFG(36,  0, GPIO_CFG_INPUT, GPIO_CFG_NO_PULL, GPIO_CFG_16MA), /* Volume Down Key  */
+#ifndef CONFIG_MUCHTEL_A1
 	GPIO_CFG(28,  0, GPIO_CFG_INPUT, GPIO_CFG_NO_PULL, GPIO_CFG_16MA), /* Send key         */
 	GPIO_CFG(19,  0, GPIO_CFG_INPUT, GPIO_CFG_NO_PULL, GPIO_CFG_16MA), /* End Key          */
+#endif
 };
 #endif /* CONFIG_FIH_F9xx_GPIO_KEYPAD */
 
@@ -1728,6 +1730,15 @@ extern int  spi_gpio_init(void); //lcm_innolux
 static ssize_t fxx_virtual_keys_show(struct kobject *kobj,
 		struct kobj_attribute *attr, char *buf)
 {
+#ifdef CONFIG_MUCHTEL_A1
+	/* for MUCHTEL-A1 entry */
+	return sprintf(buf,
+			__stringify(EV_KEY) ":" __stringify(KEY_SEND)  ":48:525:60:60"
+			":" __stringify(EV_KEY) ":" __stringify(KEY_MENU)   ":137:525:60:60"
+			":" __stringify(EV_KEY) ":" __stringify(KEY_BACK)   ":228:525:60:60"
+			":" __stringify(EV_KEY) ":" __stringify(KEY_END) ":280:525:60:60"
+			"\n");
+#else
 	/* center: x: home: 55, menu: 185, back: 305, search 425, y: 835 */
 	return sprintf(buf,
 			__stringify(EV_KEY) ":" __stringify(KEY_MENU)  ":48:525:60:60"
@@ -1735,6 +1746,7 @@ static ssize_t fxx_virtual_keys_show(struct kobject *kobj,
 			":" __stringify(EV_KEY) ":" __stringify(KEY_SEARCH)   ":228:525:60:60"
 			":" __stringify(EV_KEY) ":" __stringify(KEY_BACK) ":280:525:60:60"
 			"\n");
+#endif
 }
 
 static struct kobj_attribute fxx_virtual_keys_attr = {
