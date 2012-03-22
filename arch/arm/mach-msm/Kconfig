@@ -275,6 +275,9 @@ config FIH_FXX
 	  Say Y here if you want to support FIH FXX board.
 #-----FIH_simonsschang define vendor global macro for FXX, 2009/05/17	  
 
+config MUCHTEL_A1
+	bool "enable hacks for the Muchtel-A1"
+	default n
 
 config MACH_SAPPHIRE
 	depends on ARCH_MSM7X01A
